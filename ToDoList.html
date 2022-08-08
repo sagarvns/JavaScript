@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO DO List</title>
+    <style>
+        table {
+          border-collapse: collapse;
+          border-spacing: 0;
+          width: 100%;
+          border: 1px solid #ddd;
+        }
+
+        th, td {
+          text-align: left;
+          padding: 16px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+
+
+
+        .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.updatebutton{
+    background-color: rgba(140, 255, 255, 0.945);
+    width: 100px;
+    height: 50px;
+    border: none;
+    color: blueviolet;
+}
+
+.deletbutton{
+    background-color: red;
+    width: 100px;
+    height: 50px;
+    border: none;
+    color: white;
+}
+
+
+.box{
+    height: 50px;
+    width: 40px;
+    border-style: ridge;
+}
+.addbutton {background-color: #008CBA;} /* Blue */
+.removebutton {background-color: #f44336;} /* Red */
+
+        </style>
+    <script>
+var tasklist=Array();
+        function getTask(taskname, taskdescription, taskstatus) {
+            return { name: taskname, desc: taskdescription, status: taskstatus, toString: function () { return "Task: " + this.name + ", Description: " + this.desc + ", Status: " + this.status} };
+        }
+function f()
+{
+    let taskname=document.getElementById("task").value;
+    let taskdescription=document.getElementById("desc").value;
+    let taskstatus=document.getElementById("status").value;
+    var newtask=getTask(taskname,taskdescription,taskstatus);
+    tasklist.push(newtask);
+    //alert(tasklist);
+    saveToStorage();
+    getFromStorage();
+}
+
+
+function listClear()
+{
+
+    let data=localStorage.removeItem("task");
+    console.log(data);
+    alert("are you sure the present data is clear");
+
+ getFromStorage();
+}
+
+
+function saveToStorage()
+{
+    let data=JSON.stringify(tasklist);
+    alert(data);
+    localStorage.setItem("task",data);
+    console.log(data);
+}
+
+
+function getFromStorage()
+{
+    let data=localStorage.getItem("task");
+    console.log(data);
+    if(data==null)
+    {
+        data="[]";
+
+
+        //return;
+    }
+   data=JSON.parse(data);
+   let output="<table border='2'><tr><th>Name</th><th>Description</th><th>Status</th></tr>";
+   for(let i=0;i<=data.length-1;i++)
+   {
+    let currenttask=getTask(data[i].name,data[i].desc,data[i].status);
+    output+="<tr><td>" + currenttask.name +"</td><td>" + currenttask.desc + "</td><td>" + currenttask.status + "</td></tr>";
+   }
+   output+="</table>";
+   document.getElementById("d").innerHTML=output;
+
+}
+
+
+
+
+    </script>
+</head>
+
+<body>
+    <h1>To Do List</h1>
+    <label>Task Name<input type="text" id="task"></label>
+     <label>Task Description<textarea id="desc"></textarea></label>
+    <label>Task Status<input type="text" id="status"></label>
+    <!-- <button class="updatebutton">Update</button> -->
+    <!-- <button class="deletbutton">Delete</button> -->
+
+<button class="button addbutton"  onclick="f()">Add To List</button>
+<br>
+
+<button  class="button addbutton"    onclick=" saveToStorage()">Save</button>
+<br>
+<button   class="button addbutton"   onclick=" getFromStorage()">Get Saved List</button>
+<br>
+<button class="button removebutton"  onclick="listClear()">Clear List</button>
+<div id="d"></div>
+<script>
+    getFromStorage();
+</script>
+</body>
+
+</html>
